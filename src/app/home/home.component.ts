@@ -10,6 +10,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 })
 export class HomeComponent implements OnInit {
 
+  p = 1;
+
   articles: any;
 
   constructor(private afs: AngularFirestore, private spinner: NgxSpinnerService) {
@@ -21,12 +23,12 @@ export class HomeComponent implements OnInit {
       .snapshotChanges()
       .pipe(map(changes => {
         return changes
-          .map(doc => {
+          .map((doc: any) => {
           return {
             id: doc.payload.doc.id,
             data: doc.payload.doc.data()
           };
-        });
+        }).sort((a1, a2) => a2.data.createdAt.toString().localeCompare(a1.data.createdAt.toString()));
       }))
       .subscribe(articles => {
         this.spinner.hide();

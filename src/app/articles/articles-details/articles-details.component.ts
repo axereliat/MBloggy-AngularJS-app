@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-articles-details',
@@ -8,10 +10,20 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class ArticlesDetailsComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute) { }
+  article: any;
+
+  constructor(private route: ActivatedRoute, private spinner: NgxSpinnerService, private afs: AngularFirestore) { }
 
   ngOnInit() {
     const articleId = this.route.snapshot.params['id'];
-  }
 
+    this.spinner.show();
+    this.afs.collection('articles')
+      .doc(articleId)
+      .valueChanges()
+      .subscribe(article => {
+        this.spinner.hide();
+        this.article = article;
+      });
+  }
 }

@@ -18,13 +18,16 @@ import {NgxSpinnerModule} from 'ngx-spinner';
 import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthGuardService} from './guards/auth.guard';
+import {NgxPaginationModule} from 'ngx-pagination';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import {AuthGuardService} from './guards/auth.guard';
     UsersModule,
     ArticlesModule,
     NgxSpinnerModule,
+    NgxPaginationModule
   ],
   providers: [AuthGuardService],
   bootstrap: [AppComponent]
