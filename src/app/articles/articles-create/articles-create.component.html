@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 my-3">
+            <h2 class="mb-2">Create new article</h2>
+            <form (submit)="submit($event)">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="Title..."
+                           [(ngModel)]="model.title" #title="ngModel" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea class="form-control" [(ngModel)]="model.content" id="content" name="content"
+                              placeholder="Content" #content rows="3"></textarea>
+                </div>
+                Select category:
+                <br/>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" [(ngModel)]="model.category" type="radio" name="category" id="1" value="Sports">
+                    <label class="form-check-label" for="1">
+                        Sports
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" [(ngModel)]="model.category" type="radio" name="category" id="2" value="Music">
+                    <label class="form-check-label" for="2">
+                        Music
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" [(ngModel)]="model.category" type="radio" name="category" id="3" value="Movies">
+                    <label class="form-check-label" for="3">
+                        Movies
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" [(ngModel)]="model.category" type="radio" name="category" id="4" value="Education">
+                    <label class="form-check-label" for="4">
+                        Education
+                    </label>
+                </div>
+                <div class="form-group">
+                    <tag-input [(ngModel)]="model.tags" name="tags"></tag-input>
+                    <small class="text-muted">Press Enter to create a new tag</small>
+                </div>
+                <input type="submit" class="btn btn-primary mt-2" [disabled]="!title.value || !content.value || model.tags.length === 0 || !model.category"/>
+            </form>
+        </div>
+    </div>
+</div>

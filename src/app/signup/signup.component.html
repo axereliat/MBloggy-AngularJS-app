@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 my-3">
+      <h1 class="text-center">Sign Up</h1>
+      <form #registerForm="ngForm" (submit)="onSubmit()">
+        <div class="form-group">
+          <div class="alert alert-danger" [hidden]="errMsg === ''">
+            {{errMsg}}
+          </div>
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp"
+                 placeholder="Email address..."
+                 [(ngModel)]="model.email" #email="ngModel" required>
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          <div class="alert alert-danger" [hidden]="email.valid || email.pristine">
+            Email field is required!
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password..."
+                 [(ngModel)]="model.password" #password="ngModel" required>
+        </div>
+        <div class="alert alert-danger" [hidden]="password.valid || password.pristine">
+          Password field is required!
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm password</label>
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                 placeholder="Confirm password..." [(ngModel)]="model.confirmPassword" #confirmPassword="ngModel"
+                 required>
+        </div>
+        <div class="alert alert-danger" [hidden]="confirmPassword.valid || confirmPassword.pristine">
+          Confirm password field is required!
+        </div>
+        <div class="alert alert-danger" [hidden]="confirmPassword.value === password.value">
+          Passwords do not match!
+        </div>
+        <button type="submit" class="btn btn-primary"
+                [disabled]="!registerForm.form.valid || confirmPassword.value !== password.value">Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

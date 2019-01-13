@@ -1,0 +1,13 @@
+<div class="container my-5">
+  <h1 class="text-center mb-5">Welcome to MBloggy</h1>
+  <div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let article of articles">
+      <h3>{{article.data.title}}</h3>
+      <p>{{article.data.content.length > 200 ? article.data.content.substr(0, 200).trim() + '...' : article.data.content}}</p>
+      <!--<button *ngFor="let tag of article.data.tags" class="btn btn-outline-primary">{{tag}}</button>-->
+      <strong>{{article.data.category}}</strong>
+      <br/>
+      <a routerLink="/articles/details/{{article.id}}" class="btn btn-secondary mt-2">Details</a>
+    </div>
+  </div>
+</div>
