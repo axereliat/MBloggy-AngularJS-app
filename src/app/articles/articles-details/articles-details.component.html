@@ -1,3 +1,27 @@
-<p>
-  articles-details works!
-</p>
+<div class="container mb-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 my-3">
+      <h1>{{article.title}}</h1>
+      <p>{{article.content}}</p>
+      <p class="text-muted">Published on: {{article.createdAt}}</p>
+      <p>Category: <strong>{{article.category}}</strong></p>
+      <button *ngFor="let tag of article.tags" class="btn btn-outline-primary">{{tag}}</button>
+    </div>
+  </div>
+  <a class="btn btn-secondary" routerLink="/"><i class="fas fa-backward"></i> Back</a>
+  <form (submit)="postComment()" [hidden]="!authService.isLoggedIn()">
+    <div class="form-group">
+      <textarea class="form-control" [(ngModel)]="comment" placeholder="What do you think about this article?"
+                name="comment" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="!comment.trim()">Post</button>
+  </form>
+  <ul class="list-group mb-5">
+    <li class="list-group-item" *ngFor="let comment of article.comments | orderByCreationDate">
+      <strong>{{comment.author.email}}</strong>
+      <p>{{comment.content}}</p>
+      <button class="btn btn-danger float-right" (click)="deleteComment(comment.id)" [hidden]="!authService.isLoggedIn() || authService.currentUser.uid.toString() !== comment.author.id.toString()"><i class="fa fa-trash"></i></button>
+      <small class="text-muted float-right">{{comment.createdAt}}</small>
+    </li>
+  </ul>
+</div>

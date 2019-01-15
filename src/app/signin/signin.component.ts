@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AuthService} from '../api/auth.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -12,11 +13,10 @@ import {NgxSpinnerService} from 'ngx-spinner';
 })
 export class SigninComponent implements OnInit {
 
-  errMsg: string;
-
   model: LoginModel;
 
-  constructor(private router: Router, private afAuth: AngularFireAuth, private authService: AuthService, private spinner: NgxSpinnerService) {
+  constructor(private router: Router, private afAuth: AngularFireAuth,
+              private authService: AuthService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.model = new LoginModel('', '');
     this.errMsg = '';
   }
@@ -30,11 +30,11 @@ export class SigninComponent implements OnInit {
       .then(res => {
         this.spinner.hide();
         this.router.navigateByUrl('/');
+        this.toastr.success('You are successfully logged in :)');
       })
       .catch(err => {
         this.spinner.hide();
-        this.errMsg = err.message;
+        this.toastr.error(err.message);
       });
   }
-
 }

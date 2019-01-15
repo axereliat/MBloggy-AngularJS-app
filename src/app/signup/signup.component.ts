@@ -3,6 +3,8 @@ import {RegisterModel} from '../models/register.model';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {AuthService} from '../api/auth.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-signup',
@@ -11,11 +13,9 @@ import {NgxSpinnerService} from 'ngx-spinner';
 })
 export class SignupComponent implements OnInit {
 
-  errMsg: string;
-
   model: RegisterModel;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private spinner: NgxSpinnerService) {
+  constructor(private afAuth: AngularFireAuth, private router: Router, private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.model = new RegisterModel('', '', '');
     this.errMsg = '';
   }
@@ -29,10 +29,11 @@ export class SignupComponent implements OnInit {
       .then(res => {
         this.spinner.hide();
         this.router.navigateByUrl('/signin');
+        this.toastr.success('You are successfully registered :)');
       })
       .catch(err => {
         this.spinner.hide();
-        this.errMsg = err.message;
+        this.toastr.error(err.message);
       });
   }
 }

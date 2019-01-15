@@ -20,6 +20,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthGuardService} from './guards/auth.guard';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {TimeAgoPipe} from 'time-ago-pipe';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {TimeAgoPipe} from 'time-ago-pipe';
     UsersModule,
     ArticlesModule,
     NgxSpinnerModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ToastrModule.forRoot()
   ],
   providers: [AuthGuardService],
   bootstrap: [AppComponent]
