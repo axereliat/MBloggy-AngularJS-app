@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {ArticleModel} from '../../models/article.model';
-import {AuthService} from '../../api/auth.service';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Router} from '@angular/router';
-import * as moment from 'moment';
-import {ToastrService} from 'ngx-toastr';
+import {ArticleService} from '../../api/article.service';
 
 @Component({
   selector: 'app-toys-create',
@@ -16,8 +11,7 @@ export class ArticlesCreateComponent implements OnInit {
 
   model: ArticleModel;
 
-  constructor(private afs: AngularFirestore, private authService: AuthService,
-              private spinner: NgxSpinnerService, private router: Router, private toastr: ToastrService) {
+  constructor(private articleService: ArticleService) {
     this.model = new ArticleModel('', '', [], '');
   }
 
@@ -26,27 +20,6 @@ export class ArticlesCreateComponent implements OnInit {
   }
 
   submit() {
-    this.spinner.show();
-    this.afs.collection('articles').add({
-      title: this.model.title,
-      content: this.model.content,
-      category: this.model.category,
-      tags: this.model.tags.map(item => item.value),
-      author: {
-        uid: this.authService.currentUser.uid,
-        email: this.authService.currentUser.email
-      },
-      createdAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-      comments: []
-    })
-      .then(res => {
-        this.spinner.hide();
-        this.router.navigateByUrl('/');
-        this.toastr.success('Your article was successfully created :)');
-      })
-      .catch(err => {
-        this.spinner.hide();
-        console.log(err);
-      });
+    this.articleService.create(this.model);
   }
 }

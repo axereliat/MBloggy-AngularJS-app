@@ -5,7 +5,17 @@
       <p>{{article.content}}</p>
       <p class="text-muted">Published on: {{article.createdAt}}</p>
       <p>Category: <strong>{{article.category}}</strong></p>
+      <p>Published by: <strong>{{article.author.email}}</strong></p>
       <button *ngFor="let tag of article.tags" class="btn btn-outline-primary">{{tag}}</button>
+      <br/>
+      <button class="btn btn-danger mt-2 mr-2"
+              (click)="deleteArticle()"
+              [hidden]="!authService.isLoggedIn() || articleId === authService.currentUser.uid">
+        <i class="fa fa-trash"></i> Delete
+      </button>
+      <button class="btn btn-secondary mt-2" [hidden]="!authService.isLoggedIn() || articleId === authService.currentUser.uid">
+        <i class="fa fa-edit"></i> Edit
+      </button>
     </div>
   </div>
   <a class="btn btn-secondary" routerLink="/"><i class="fas fa-backward"></i> Back</a>
@@ -20,7 +30,11 @@
     <li class="list-group-item" *ngFor="let comment of article.comments | orderByCreationDate">
       <strong>{{comment.author.email}}</strong>
       <p>{{comment.content}}</p>
-      <button class="btn btn-danger float-right" (click)="deleteComment(comment.id)" [hidden]="!authService.isLoggedIn() || authService.currentUser.uid.toString() !== comment.author.id.toString()"><i class="fa fa-trash"></i></button>
+      <button class="btn btn-danger float-right"
+              (click)="deleteComment(comment.id)"
+              [hidden]="!authService.isLoggedIn() || authService.currentUser.uid.toString() !== comment.author.id.toString()">
+        <i class="fa fa-trash"></i>
+      </button>
       <small class="text-muted float-right">{{comment.createdAt}}</small>
     </li>
   </ul>

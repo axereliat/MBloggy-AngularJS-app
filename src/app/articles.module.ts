@@ -10,6 +10,7 @@ import {ArticlesCreateComponent} from './articles/articles-create/articles-creat
 import {ArticlesDetailsComponent} from './articles/articles-details/articles-details.component';
 import {TagInputModule} from 'ngx-chips';
 import {OrderByDateOfCreationPipe} from './pipes/OrderByDateOfCreationPipe';
+import {ArticleService} from './api/article.service';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,7 @@ import {OrderByDateOfCreationPipe} from './pipes/OrderByDateOfCreationPipe';
         AngularFireStorageModule,
         TagInputModule
     ],
-    providers: [],
+    providers: [ArticleService],
     bootstrap: []
 })
 export class ArticlesModule {

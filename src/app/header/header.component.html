@@ -21,6 +21,9 @@
     </ul>
     <ul class="navbar-nav mr-0">
       <li class="nav-item active">
+        <a class="nav-link text-warning" href="#" *ngIf="authService.isLoggedIn()">Hello, {{authService.currentUser.email}}</a>
+      </li>
+      <li class="nav-item active">
         <a class="nav-link text-white" href="#" (click)="signout()" *ngIf="authService.isLoggedIn()">Sign out</a>
       </li>
     </ul>

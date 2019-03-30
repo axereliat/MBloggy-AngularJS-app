@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Article} from '../../data/Article';
@@ -16,11 +16,13 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class ArticlesDetailsComponent implements OnInit {
 
+  articleId;
+
   article: Article;
 
   comment: string;
 
-  constructor(private route: ActivatedRoute, private spinner: NgxSpinnerService,
+  constructor(private router: Router, private route: ActivatedRoute, private spinner: NgxSpinnerService,
               private afs: AngularFirestore, public authService: AuthService, private toastr: ToastrService) {
     this.article = new class implements Article {
       author: any;
@@ -32,14 +34,13 @@ export class ArticlesDetailsComponent implements OnInit {
       comments: any[];
     };
     this.comment = '';
+    this.articleId = this.route.snapshot.params['id'];
   }
 
   ngOnInit() {
-    const articleId = this.route.snapshot.params['id'];
-
     this.spinner.show();
     this.afs.collection('articles')
-      .doc(articleId)
+      .doc(this.articleId)
       .valueChanges()
       .subscribe(article => {
         this.spinner.hide();
@@ -48,18 +49,16 @@ export class ArticlesDetailsComponent implements OnInit {
   }
 
   postComment() {
-    const articleId = this.route.snapshot.params['id'];
-
     this.spinner.show();
     this.afs.collection('articles')
-      .doc(articleId)
+      .doc(this.articleId)
       .get()
       .pipe(map(changes => {
         return changes;
       }))
       .subscribe(article => {
         this.afs.collection('articles')
-          .doc(articleId)
+          .doc(this.articleId)
           .update({
             comments: article.data().comments.concat({
               id: uuidv1(),
@@ -83,18 +82,19 @@ export class ArticlesDetailsComponent implements OnInit {
   }
 
   deleteComment(commentId) {
-    const articleId = this.route.snapshot.params['id'];
-
+    if (!confirm('Are you sure you want to delete this comment?')) {
+      return;
+    }
     this.spinner.show();
     this.afs.collection('articles')
-      .doc(articleId)
+      .doc(this.articleId)
       .get()
       .pipe(map(changes => {
         return changes;
       }))
       .subscribe(article => {
         this.afs.collection('articles')
-          .doc(articleId)
+          .doc(this.articleId)
           .update({
             comments: article.data().comments.filter(c => c.id !== commentId)
           }).then(() => {
@@ -104,6 +104,25 @@ export class ArticlesDetailsComponent implements OnInit {
           this.spinner.hide();
           console.log(err);
         });
+      });
+  }
+
+  deleteArticle() {
+    if (!confirm('Are you sure you want to delete this article?')) {
+      return;
+    }
+    this.spinner.show();
+    this.afs.collection('articles')
+      .doc(this.articleId)
+      .delete()
+      .then(() => {
+        this.spinner.hide();
+        this.router.navigateByUrl('/');
+        this.toastr.success('Your article was successfully deleted');
+      })
+      .catch(err => {
+        console.log(err);
+        this.spinner.hide();
       });
   }
 }
