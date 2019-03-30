@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Route, Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {Article} from '../../data/Article';
@@ -8,6 +8,7 @@ import {map} from 'rxjs/operators';
 import * as moment from 'moment';
 import uuidv1 from 'uuid/v1';
 import {ToastrService} from 'ngx-toastr';
+import {ArticleService} from '../../api/article.service';
 
 @Component({
   selector: 'app-articles-details',
@@ -16,14 +17,14 @@ import {ToastrService} from 'ngx-toastr';
 })
 export class ArticlesDetailsComponent implements OnInit {
 
-  articleId;
+  articleId: string;
 
   article: Article;
 
   comment: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private spinner: NgxSpinnerService,
-              private afs: AngularFirestore, public authService: AuthService, private toastr: ToastrService) {
+  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private spinner: NgxSpinnerService,
+              private authService: AuthService, private toastr: ToastrService, private afs: AngularFirestore) {
     this.article = new class implements Article {
       author: any;
       category: string;
@@ -38,46 +39,25 @@ export class ArticlesDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinner.show();
-    this.afs.collection('articles')
-      .doc(this.articleId)
-      .valueChanges()
-      .subscribe(article => {
+    this.articleService.fetchById(this.articleId, this.article)
+      .subscribe(fetchedArticle => {
         this.spinner.hide();
-        this.article = article as Article;
+        this.article = fetchedArticle as Article;
       });
   }
 
   postComment() {
     this.spinner.show();
-    this.afs.collection('articles')
-      .doc(this.articleId)
-      .get()
-      .pipe(map(changes => {
-        return changes;
-      }))
-      .subscribe(article => {
-        this.afs.collection('articles')
-          .doc(this.articleId)
-          .update({
-            comments: article.data().comments.concat({
-              id: uuidv1(),
-              author: {
-                id: this.authService.currentUser.uid,
-                email: this.authService.currentUser.email
-              },
-              content: this.comment,
-              createdAt: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-            })
-          }).then(() => {
-            this.spinner.hide();
-            this.comment = '';
-            this.toastr.success('Your comment was successfully posted :)');
-          }).catch(err => {
-            this.spinner.hide();
-            this.comment = '';
-            console.log(err);
-        });
+    this.articleService.postComment(this.articleId, this.comment)
+      .then(() => {
+        this.spinner.hide();
+        this.comment = '';
+        this.toastr.success('Your comment was successfully posted :)');
+      })
+      .catch(err => {
+        this.spinner.hide();
+        this.comment = '';
+        console.log(err);
       });
   }
 
@@ -86,24 +66,14 @@ export class ArticlesDetailsComponent implements OnInit {
       return;
     }
     this.spinner.show();
-    this.afs.collection('articles')
-      .doc(this.articleId)
-      .get()
-      .pipe(map(changes => {
-        return changes;
-      }))
-      .subscribe(article => {
-        this.afs.collection('articles')
-          .doc(this.articleId)
-          .update({
-            comments: article.data().comments.filter(c => c.id !== commentId)
-          }).then(() => {
-          this.spinner.hide();
-          this.toastr.success('Your comment was successfully deleted');
-        }).catch(err => {
-          this.spinner.hide();
-          console.log(err);
-        });
+    this.articleService.deleteComment(commentId, this.articleId)
+      .then(() => {
+        this.spinner.hide();
+        this.toastr.success('Your comment was successfully deleted');
+      })
+      .catch(err => {
+        this.spinner.hide();
+        console.log(err);
       });
   }
 
@@ -112,9 +82,7 @@ export class ArticlesDetailsComponent implements OnInit {
       return;
     }
     this.spinner.show();
-    this.afs.collection('articles')
-      .doc(this.articleId)
-      .delete()
+    this.articleService.deleteArticle(this.articleId)
       .then(() => {
         this.spinner.hide();
         this.router.navigateByUrl('/');
