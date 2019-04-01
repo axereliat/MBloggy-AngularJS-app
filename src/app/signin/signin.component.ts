@@ -15,8 +15,8 @@ export class SigninComponent implements OnInit {
 
   model: LoginModel;
 
-  constructor(private router: Router, private afAuth: AngularFireAuth,
-              private authService: AuthService, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor(private router: Router, private authService: AuthService,
+              private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.model = new LoginModel('', '');
   }
 
@@ -25,7 +25,7 @@ export class SigninComponent implements OnInit {
 
   onSubmit() {
     this.spinner.show();
-    this.afAuth.auth.signInWithEmailAndPassword(this.model.email, this.model.password)
+    this.authService.signIn(this.model.email, this.model.password)
       .then(res => {
         this.spinner.hide();
         this.router.navigateByUrl('/');

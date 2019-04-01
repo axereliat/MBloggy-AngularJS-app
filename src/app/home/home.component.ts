@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {ArticleService} from '../api/article.service';
 
 @Component({
   selector: 'app-home',
@@ -14,22 +15,12 @@ export class HomeComponent implements OnInit {
 
   articles: any;
 
-  constructor(private afs: AngularFirestore, private spinner: NgxSpinnerService) {
+  constructor(private articleService: ArticleService, private spinner: NgxSpinnerService) {
   }
 
   ngOnInit() {
     this.spinner.show();
-    this.afs.collection('articles')
-      .snapshotChanges()
-      .pipe(map(changes => {
-        return changes
-          .map((doc: any) => {
-          return {
-            id: doc.payload.doc.id,
-            data: doc.payload.doc.data()
-          };
-        }).sort((a1, a2) => a2.data.createdAt.toString().localeCompare(a1.data.createdAt.toString()));
-      }))
+    this.articleService.fetchAll()
       .subscribe(articles => {
         this.spinner.hide();
         this.articles = articles;

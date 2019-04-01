@@ -15,9 +15,8 @@ export class SignupComponent implements OnInit {
 
   model: RegisterModel;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private spinner: NgxSpinnerService, private toastr: ToastrService) {
+  constructor(private authService: AuthService, private router: Router, private spinner: NgxSpinnerService, private toastr: ToastrService) {
     this.model = new RegisterModel('', '', '');
-    this.errMsg = '';
   }
 
   ngOnInit() {
@@ -25,7 +24,7 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
     this.spinner.show();
-    this.afAuth.auth.createUserWithEmailAndPassword(this.model.email, this.model.password)
+    this.authService.signUp(this.model.email, this.model.password)
       .then(res => {
         this.spinner.hide();
         this.router.navigateByUrl('/signin');

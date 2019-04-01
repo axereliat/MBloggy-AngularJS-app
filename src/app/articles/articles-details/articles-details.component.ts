@@ -1,12 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Route, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {AngularFirestore} from '@angular/fire/firestore';
 import {Article} from '../../data/Article';
 import {AuthService} from '../../api/auth.service';
-import {map} from 'rxjs/operators';
-import * as moment from 'moment';
-import uuidv1 from 'uuid/v1';
 import {ToastrService} from 'ngx-toastr';
 import {ArticleService} from '../../api/article.service';
 
@@ -23,8 +19,8 @@ export class ArticlesDetailsComponent implements OnInit {
 
   comment: string;
 
-  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService, private spinner: NgxSpinnerService,
-              private authService: AuthService, private toastr: ToastrService, private afs: AngularFirestore) {
+  constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService,
+              private spinner: NgxSpinnerService, private authService: AuthService, private toastr: ToastrService) {
     this.article = new class implements Article {
       author: any;
       category: string;

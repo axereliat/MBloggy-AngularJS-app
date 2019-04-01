@@ -112,4 +112,18 @@ export class ArticleService {
         });
     });
   }
+
+  fetchAll(): Observable<any> {
+    return this.afs.collection('articles')
+      .snapshotChanges()
+      .pipe(map(changes => {
+        return changes
+          .map((doc: any) => {
+            return {
+              id: doc.payload.doc.id,
+              data: doc.payload.doc.data()
+            };
+          }).sort((a1, a2) => a2.data.createdAt.toString().localeCompare(a1.data.createdAt.toString()));
+      }));
+  }
 }
