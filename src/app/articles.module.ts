@@ -11,12 +11,14 @@ import {ArticlesDetailsComponent} from './articles/articles-details/articles-det
 import {TagInputModule} from 'ngx-chips';
 import {OrderByDateOfCreationPipe} from './pipes/OrderByDateOfCreationPipe';
 import {ArticleService} from './api/article.service';
+import { CommentsListComponent } from './comments/comments-list/comments-list.component';
 
 @NgModule({
     declarations: [
         ArticlesCreateComponent,
         ArticlesDetailsComponent,
-        OrderByDateOfCreationPipe
+        OrderByDateOfCreationPipe,
+        CommentsListComponent
     ],
     imports: [
         BrowserModule,

@@ -26,6 +26,8 @@
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="!comment.trim()">Post</button>
   </form>
+  <app-comments-list [comments]="article.comments" [articleId]="articleId"></app-comments-list>
+  <!--
   <ul class="list-group mb-5">
     <li class="list-group-item" *ngFor="let comment of article.comments | orderByCreationDate">
       <strong>{{comment.author.email}}</strong>
@@ -37,5 +39,5 @@
       </button>
       <small class="text-muted float-right">{{comment.createdAt}}</small>
     </li>
-  </ul>
+  </ul>-->
 </div>

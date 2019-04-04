@@ -1,0 +1,12 @@
+<ul class="list-group mb-5">
+  <li class="list-group-item" *ngFor="let comment of comments | orderByCreationDate">
+    <strong>{{comment.author.email}}</strong>
+    <p>{{comment.content}}</p>
+    <button class="btn btn-danger float-right"
+            (click)="deleteComment(comment.id)"
+            [hidden]="!authService.isLoggedIn() || authService.currentUser.uid.toString() !== comment.author.id.toString()">
+      <i class="fa fa-trash"></i>
+    </button>
+    <small class="text-muted float-right">{{comment.createdAt}}</small>
+  </li>
+</ul>

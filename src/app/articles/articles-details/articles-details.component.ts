@@ -20,7 +20,7 @@ export class ArticlesDetailsComponent implements OnInit {
   comment: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private articleService: ArticleService,
-              private spinner: NgxSpinnerService, private authService: AuthService, private toastr: ToastrService) {
+              private spinner: NgxSpinnerService, public authService: AuthService, private toastr: ToastrService) {
     this.article = new class implements Article {
       author: any;
       category: string;
