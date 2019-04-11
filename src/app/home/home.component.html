@@ -1,10 +1,12 @@
 <div class="container my-5">
   <h1 class="text-center mb-5">Welcome to MBloggy</h1>
+  <form>
+    <input type="text" name="search" class="form-control" style="width: 30%" [(ngModel)]="search" placeholder="Search by title..." (keyup)="filterArticles()">
+  </form>
   <div class="row">
-    <div class="col-md-4 mb-4" *ngFor="let article of articles | paginate: { itemsPerPage: 3, currentPage: p }">
+    <div class="col-md-4 mb-4" *ngFor="let article of filteredArticles | paginate: { itemsPerPage: 3, currentPage: p }">
       <h3>{{article.data.title}}</h3>
       <p>{{article.data.content.length > 200 ? article.data.content.substr(0, 200).trim() + '...' : article.data.content}}</p>
-      <!--<button *ngFor="let tag of article.data.tags" class="btn btn-outline-primary">{{tag}}</button>-->
       <strong>{{article.data.category}}</strong>
       <small class="text-muted float-right">{{article.data.createdAt | timeAgo}}</small>
       <br/>

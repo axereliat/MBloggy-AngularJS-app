@@ -11,9 +11,13 @@ import {ArticleService} from '../api/article.service';
 })
 export class HomeComponent implements OnInit {
 
+  search: string;
+
   p = 1;
 
   articles: any;
+
+  filteredArticles: any;
 
   constructor(private articleService: ArticleService, private spinner: NgxSpinnerService) {
   }
@@ -24,6 +28,11 @@ export class HomeComponent implements OnInit {
       .subscribe(articles => {
         this.spinner.hide();
         this.articles = articles;
+        this.filteredArticles = articles;
       });
+  }
+
+  filterArticles() {
+    this.filteredArticles = this.articles.filter((article: any) => article.data.title.toLowerCase().includes(this.search.toLowerCase()));
   }
 }
