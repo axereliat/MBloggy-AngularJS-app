@@ -1,5 +1,6 @@
 <div class="container my-5">
   <h1 class="text-center mb-5">Welcome to MBloggy</h1>
+  <h3 class="text-center mb-5 text-danger" *ngIf="authService.isAdmin()">YOU ARE ADMIN</h3>
   <form>
     <input type="text" name="search" class="form-control" style="width: 30%" [(ngModel)]="search" placeholder="Search by title..." (keyup)="filterArticles()">
   </form>

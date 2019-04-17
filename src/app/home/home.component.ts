@@ -3,6 +3,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {map} from 'rxjs/operators';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {ArticleService} from '../api/article.service';
+import {AuthService} from '../api/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
 
   filteredArticles: any;
 
-  constructor(private articleService: ArticleService, private spinner: NgxSpinnerService) {
+  constructor(public authService: AuthService, private articleService: ArticleService, private spinner: NgxSpinnerService) {
   }
 
   ngOnInit() {

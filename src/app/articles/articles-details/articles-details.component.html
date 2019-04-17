@@ -10,13 +10,13 @@
       <br/>
       <button class="btn btn-danger mt-2 mr-2"
               (click)="deleteArticle()"
-              [hidden]="!authService.isLoggedIn() || articleId === authService.currentUser.uid">
+              *ngIf="authService.isLoggedIn() && article.author.uid === authService.currentUser.uid">
         <i class="fa fa-trash"></i> Delete
       </button>
     </div>
   </div>
   <a class="btn btn-secondary" routerLink="/"><i class="fas fa-backward"></i> Back</a>
-  <form (submit)="postComment()" [hidden]="!authService.isLoggedIn()">
+  <form (submit)="postComment()" *ngIf="authService.isLoggedIn()">
     <div class="form-group">
       <textarea class="form-control" [(ngModel)]="comment" placeholder="What do you think about this article?"
                 name="comment" rows="3"></textarea>

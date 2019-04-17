@@ -21,6 +21,7 @@ import {AuthGuardService} from './guards/auth.guard';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import {ToastrModule} from 'ngx-toastr';
+import {AdminModule} from './admin.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {ToastrModule} from 'ngx-toastr';
     HttpClientModule,
     UsersModule,
     ArticlesModule,
+    AdminModule,
     NgxSpinnerModule,
     NgxPaginationModule,
     ToastrModule.forRoot()
